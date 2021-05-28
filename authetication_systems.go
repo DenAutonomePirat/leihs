@@ -118,18 +118,17 @@ type AuthenticationSystems struct {
 type AuthenticationSystem struct {
 	Description           string    `json:"description,omitempty" yaml:"description"`
 	ExternalSignInURL     string    `json:"external_sign_in_url,omitempty" yaml:"external_sign_in_url"`
-	InternalPrivateKey    string    `json:"internal_private_key,omitempty" yaml:"internal_private_key"`
+	InternalPrivateKey    string    `json:"internal_private_key,omitempty" yaml:"-"`
 	SendOrgID             bool      `json:"send_org_id,omitempty" yaml:"send_org_id"`
-	GroupsCount           int       `json:"groups_count,omitempty" yaml:"groups_count"`
+	GroupsCount           int       `json:"groups_count,omitempty" yaml:"-"`
 	ShortcutSignInEnabled bool      `json:"shortcut_sign_in_enabled,omitempty" yaml:"shortcut_sign_in_enabled"`
-	UsersCount            int       `json:"users_count,omitempty" yaml:"users_count"`
+	UsersCount            int       `json:"users_count,omitempty" yaml:"-"`
 	SendEmail             bool      `json:"send_email,omitempty" yaml:"send_email"`
-	ExternalPublicKey     string    `json:"external_public_key,omitempty" yaml:"external_public_key"`
+	ExternalPublicKey     string    `json:"external_public_key,omitempty" yaml:"-"`
 	Name                  string    `json:"name,omitempty" yaml:"name"`
 	SendLogin             bool      `json:"send_login,omitempty" yaml:"send_login"`
 	Type                  string    `json:"type,omitempty" yaml:"type"`
 	SignUpEmailMatch      string    `json:"sign_up_email_match,omitempty" yaml:"sign_up_email_match"`
-	InternalPublicKey     string    `json:"internal_public_key,omitempty" yaml:"internal_public_key"`
 	UpdatedAt             time.Time `json:"updated_at,omitempty" yaml:"-"`
 	Priority              int       `json:"priority,omitempty" yaml:"priority"`
 	ID                    string    `json:"id,omitempty" yaml:"id"`
