@@ -130,10 +130,10 @@ type AuthenticationSystem struct {
 	Type                  string    `json:"type,omitempty" yaml:"type"`
 	SignUpEmailMatch      string    `json:"sign_up_email_match,omitempty" yaml:"sign_up_email_match"`
 	InternalPublicKey     string    `json:"internal_public_key,omitempty" yaml:"internal_public_key"`
-	UpdatedAt             time.Time `json:"updated_atjson,omitempty" yaml:"updated_atkjkj"`
+	UpdatedAt             time.Time `json:"updated_at,omitempty" yaml:"-"`
 	Priority              int       `json:"priority,omitempty" yaml:"priority"`
 	ID                    string    `json:"id,omitempty" yaml:"id"`
 	ExternalSignOutURL    string    `json:"external_sign_out_url,omitempty" yaml:"external_sign_out_url"`
 	Enabled               bool      `json:"enabled,omitempty" yaml:"enabled"`
-	CreaatedAt            time.Time `json:"created_atjson,omitempty" yaml:"created_atlhlhkj"`
+	CreatedAt             time.Time `json:"created_at,omitempty" yaml:"-"`
 }
