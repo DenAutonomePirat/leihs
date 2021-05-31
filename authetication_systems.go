@@ -116,23 +116,23 @@ type AuthenticationSystems struct {
 
 // AuthenticationSystem ...
 type AuthenticationSystem struct {
+	Name                  string    `json:"name,omitempty" yaml:"name"`
+	Priority              int       `json:"priority,omitempty" yaml:"priority"`
+	Enabled               bool      `json:"enabled,omitempty" yaml:"enabled"`
 	Description           string    `json:"description,omitempty" yaml:"description"`
 	ExternalSignInURL     string    `json:"external_sign_in_url,omitempty" yaml:"external_sign_in_url"`
-	InternalPrivateKey    string    `json:"internal_private_key,omitempty" yaml:"-"`
-	SendOrgID             bool      `json:"send_org_id,omitempty" yaml:"send_org_id"`
-	GroupsCount           int       `json:"groups_count,omitempty" yaml:"-"`
+	ExternalSignOutURL    string    `json:"external_sign_out_url,omitempty" yaml:"external_sign_out_url"`
+	SignUpEmailMatch      string    `json:"sign_up_email_match,omitempty" yaml:"sign_up_email_match"`
 	ShortcutSignInEnabled bool      `json:"shortcut_sign_in_enabled,omitempty" yaml:"shortcut_sign_in_enabled"`
-	UsersCount            int       `json:"users_count,omitempty" yaml:"-"`
+	SendOrgID             bool      `json:"send_org_id,omitempty" yaml:"send_org_id"`
 	SendEmail             bool      `json:"send_email,omitempty" yaml:"send_email"`
-	ExternalPublicKey     string    `json:"external_public_key,omitempty" yaml:"-"`
-	Name                  string    `json:"name,omitempty" yaml:"name"`
 	SendLogin             bool      `json:"send_login,omitempty" yaml:"send_login"`
 	Type                  string    `json:"type,omitempty" yaml:"type"`
-	SignUpEmailMatch      string    `json:"sign_up_email_match,omitempty" yaml:"sign_up_email_match"`
-	UpdatedAt             time.Time `json:"updated_at,omitempty" yaml:"-"`
-	Priority              int       `json:"priority,omitempty" yaml:"priority"`
 	ID                    string    `json:"id,omitempty" yaml:"id"`
-	ExternalSignOutURL    string    `json:"external_sign_out_url,omitempty" yaml:"external_sign_out_url"`
-	Enabled               bool      `json:"enabled,omitempty" yaml:"enabled"`
+	InternalPrivateKey    string    `json:"internal_private_key,omitempty" yaml:"-"`
+	ExternalPublicKey     string    `json:"external_public_key,omitempty" yaml:"-"`
 	CreatedAt             time.Time `json:"created_at,omitempty" yaml:"-"`
+	UsersCount            int       `json:"users_count,omitempty" yaml:"-"`
+	GroupsCount           int       `json:"groups_count,omitempty" yaml:"-"`
+	UpdatedAt             time.Time `json:"updated_at,omitempty" yaml:"-"`
 }
