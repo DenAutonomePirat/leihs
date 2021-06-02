@@ -8,8 +8,6 @@ import (
 	"net/http"
 	"strings"
 	"time"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 // AddUser ...
@@ -51,7 +49,6 @@ func (l *Leihs) AddUser(u *User) (user *User, err error) {
 	if err != nil {
 		return nil, err
 	}
-	spew.Dump(user)
 
 	return user, nil
 }
