@@ -9,6 +9,26 @@ import (
 	"time"
 )
 
+func (l *Leihs) AddToAuthenticationSystem(g *Group, as *AuthenticationSystem) (err error) {
+
+	req, err := http.NewRequest("PUT", l.url+"/admin/system/authentication-systems/"+as.ID+"/groups/"+g.ID, nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Add("Accept", "application/json")
+	req.SetBasicAuth("Token", l.token)
+	resp, err := l.client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	_, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // AddAuthenticationSystem ...
 func (l *Leihs) AddAuthenticationSystem(a *AuthenticationSystem) (err error) {
 	payload, err := json.Marshal(a)
@@ -37,7 +57,7 @@ func (l *Leihs) AddAuthenticationSystem(a *AuthenticationSystem) (err error) {
 // FindAuthenticationSystems ...
 func (l *Leihs) FindAuthenticationSystems() (a *[]AuthenticationSystem, err error) {
 
-	req, err := http.NewRequest("GET", l.url+"/admin/system/authentication-systems/", nil)
+	req, err := http.NewRequest("GET", l.url+"admin/system/authentication-systems/", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +88,7 @@ func (l *Leihs) FindAuthenticationSystems() (a *[]AuthenticationSystem, err erro
 // AuthenticationSystemByID ...
 func (l *Leihs) AuthenticationSystemByID(id string) (a *AuthenticationSystem, err error) {
 
-	req, err := http.NewRequest("GET", l.url+"/admin/system/authentication-systems/"+id, nil)
+	req, err := http.NewRequest("GET", l.url+"admin/system/authentication-systems/"+id, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -80,8 +100,8 @@ func (l *Leihs) AuthenticationSystemByID(id string) (a *AuthenticationSystem, er
 		return nil, err
 
 	}
-
 	defer resp.Body.Close()
+
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
@@ -106,7 +126,7 @@ func (l *Leihs) AuthenticationSystemByName(name string) (*AuthenticationSystem, 
 			return &v, nil
 		}
 	}
-	return nil, errors.New("Authentication sysytem not found")
+	return nil, errors.New("Authentication system not found")
 }
 
 //AuthenticationSystems ...
@@ -130,6 +150,7 @@ type AuthenticationSystem struct {
 	Type                  string    `json:"type,omitempty" yaml:"type"`
 	ID                    string    `json:"id,omitempty" yaml:"id"`
 	InternalPrivateKey    string    `json:"internal_private_key,omitempty" yaml:"-"`
+	InternalPublicKey     string    `json:"internal_public_key,omitempty" yaml:"-"`
 	ExternalPublicKey     string    `json:"external_public_key,omitempty" yaml:"-"`
 	CreatedAt             time.Time `json:"created_at,omitempty" yaml:"-"`
 	UsersCount            int       `json:"users_count,omitempty" yaml:"-"`

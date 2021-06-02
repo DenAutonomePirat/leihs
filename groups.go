@@ -1,14 +1,51 @@
 package leihs
 
 import (
+	"bytes"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"net/http"
 )
 
-// AddGroup ..
-func (l *Leihs) AddGroup() {}
+// AddGroup adsa group
+
+func (l *Leihs) AddGroup(g *Group) (err error) {
+	groupStr, err := json.Marshal(g)
+	if err != nil {
+		return
+	}
+	req, err := http.NewRequest("POST", l.url+"admin/groups/", bytes.NewBuffer(groupStr))
+	if err != nil {
+		return
+	}
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/json")
+	req.SetBasicAuth("Token", l.token)
+
+	resp, err := l.client.Do(req)
+	if err != nil {
+		return
+	}
+	if resp.StatusCode != 200 {
+		return errors.New(resp.Status)
+	}
+	return
+}
+
+// GroupByName ...
+func (l *Leihs) GroupByName(name string) (*Group, error) {
+	g, err := l.FindGroups()
+	if err != nil {
+		return nil, err
+	}
+	for _, v := range *g {
+		if v.Name == name {
+			return &v, nil
+		}
+	}
+	return nil, errors.New("Group not found")
+}
 
 // AddToGroup ...
 func (l *Leihs) AddToGroup(u *User, g *Group) (err error) {
@@ -24,12 +61,10 @@ func (l *Leihs) AddToGroup(u *User, g *Group) (err error) {
 		return err
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
-
-	fmt.Printf("resp.Body %s", string(body))
 	return nil
 }
 
@@ -71,8 +106,9 @@ type Groups struct {
 
 // Group ...
 type Group struct {
-	Name       string      `json:"name"`
-	OrgID      interface{} `json:"org_id"`
-	ID         string      `json:"id"`
-	CountUsers int         `json:"count_users"`
+	Name        string      `json:"name"`
+	OrgID       interface{} `json:"org_id"`
+	ID          string      `json:"id"`
+	CountUsers  int         `json:"count_users"`
+	Description string      `json:"description"`
 }

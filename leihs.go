@@ -24,6 +24,7 @@ func NewLeihs(c *Config) *Leihs {
 		token: c.Token,
 		url:   c.LeihsURL,
 	}
+
 	return l
 }
 

@@ -6,8 +6,10 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"net/url"
+	"strings"
 	"time"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 // AddUser ...
@@ -15,19 +17,22 @@ func (l *Leihs) AddUser(u *User) (user *User, err error) {
 	if !isEmailValid(u.Email) {
 		return nil, errors.New("Invalid email")
 	}
+	//make payload
 	userStr, err := json.Marshal(u)
 	if err != nil {
 		return nil, err
 	}
-	req, err := http.NewRequest("POST", l.url+"/admin/users/", bytes.NewBuffer(userStr))
+
+	//prep request
+	req, err := http.NewRequest("POST", l.url+"admin/users/", bytes.NewBuffer(userStr))
 	if err != nil {
 		return nil, err
 	}
-
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
 	req.SetBasicAuth("Token", l.token)
 
+	//do
 	resp, err := l.client.Do(req)
 	if err != nil {
 		return nil, err
@@ -46,6 +51,7 @@ func (l *Leihs) AddUser(u *User) (user *User, err error) {
 	if err != nil {
 		return nil, err
 	}
+	spew.Dump(user)
 
 	return user, nil
 }
@@ -53,10 +59,11 @@ func (l *Leihs) AddUser(u *User) (user *User, err error) {
 // FindUser ...
 func (l *Leihs) FindUser(term string) (user *User, err error) {
 
-	req, err := http.NewRequest("GET", l.url+"/admin/users?term="+url.QueryEscape(term), nil)
+	req, err := http.NewRequest("GET", l.url+"admin/users?term="+term, nil)
 	if err != nil {
 		return nil, err
 	}
+
 	req.Header.Add("Accept", "application/json")
 	req.SetBasicAuth("Token", l.token)
 
@@ -72,33 +79,22 @@ func (l *Leihs) FindUser(term string) (user *User, err error) {
 		return nil, err
 	}
 
-	users := &Users{}
+	result := &Users{}
 
-	err = json.Unmarshal(body, users)
-	if err != nil {
-		return nil, err
-	}
-	req.URL, _ = url.Parse(l.url + "/admin/users/" + users.Users[0].ID)
+	err = json.Unmarshal(body, result)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err = l.client.Do(req)
-	if err != nil {
-		return nil, err
+	for i, v := range result.Users {
+		if strings.Compare(v.Email, term) == 0 {
+			return &result.Users[i], nil
+
+		}
 	}
 
-	defer resp.Body.Close()
-	body, err = ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(body, user)
-	if err != nil {
-		return nil, err
-	}
+	return nil, errors.New("User not found")
 
-	return user, nil
 }
 
 // FindUsers ..
