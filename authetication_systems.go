@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -36,7 +35,6 @@ func (l *Leihs) AddAuthenticationSystem(a *AuthenticationSystem) (err error) {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%s\n", payload)
 	req, err := http.NewRequest("POST", l.url+"/admin/system/authentication-systems/", bytes.NewBuffer(payload))
 	if err != nil {
 		return err
@@ -49,17 +47,6 @@ func (l *Leihs) AddAuthenticationSystem(a *AuthenticationSystem) (err error) {
 	if err != nil {
 		return err
 	}
-
-	// read response body
-	body, error := ioutil.ReadAll(resp.Body)
-	if error != nil {
-		fmt.Println(error)
-	}
-	// close response body
-	resp.Body.Close()
-
-	// print response body
-	fmt.Println(string(body))
 
 	if resp.StatusCode != 200 {
 		return errors.New(resp.Status)
