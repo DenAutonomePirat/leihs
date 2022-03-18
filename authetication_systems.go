@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -35,7 +36,7 @@ func (l *Leihs) AddAuthenticationSystem(a *AuthenticationSystem) (err error) {
 	if err != nil {
 		return err
 	}
-
+	fmt.Printf("%s\n", payload)
 	req, err := http.NewRequest("POST", l.url+"/admin/system/authentication-systems/", bytes.NewBuffer(payload))
 	if err != nil {
 		return err
@@ -48,6 +49,18 @@ func (l *Leihs) AddAuthenticationSystem(a *AuthenticationSystem) (err error) {
 	if err != nil {
 		return err
 	}
+
+	// read response body
+	body, error := ioutil.ReadAll(resp.Body)
+	if error != nil {
+		fmt.Println(error)
+	}
+	// close response body
+	resp.Body.Close()
+
+	// print response body
+	fmt.Println(string(body))
+
 	if resp.StatusCode != 200 {
 		return errors.New(resp.Status)
 	}
@@ -86,7 +99,7 @@ func (l *Leihs) FindAuthenticationSystems() (a *[]AuthenticationSystem, err erro
 }
 
 // AuthenticationSystemByID ...
-func (l *Leihs) AuthenticationSystemByID(id string) (a *AuthenticationSystem, err error) {
+func (l *Leihs) AuthenticationSystemByID(id string) (*AuthenticationSystem, error) {
 
 	req, err := http.NewRequest("GET", l.url+"admin/system/authentication-systems/"+id, nil)
 	if err != nil {
@@ -106,6 +119,7 @@ func (l *Leihs) AuthenticationSystemByID(id string) (a *AuthenticationSystem, er
 	if err != nil {
 		return nil, err
 	}
+	a := &AuthenticationSystem{}
 
 	err = json.Unmarshal(body, a)
 	if err != nil {
