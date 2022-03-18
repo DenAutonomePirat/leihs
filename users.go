@@ -35,7 +35,9 @@ func (l *Leihs) AddUser(u *User) (user *User, err error) {
 	if err != nil {
 		return nil, err
 	}
+
 	defer resp.Body.Close()
+
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
@@ -44,6 +46,8 @@ func (l *Leihs) AddUser(u *User) (user *User, err error) {
 	if resp.StatusCode != http.StatusOK {
 		return nil, errors.New(string(body))
 	}
+
+	user = &User{}
 
 	err = json.Unmarshal(body, user)
 	if err != nil {
@@ -86,7 +90,6 @@ func (l *Leihs) FindUser(term string) (user *User, err error) {
 	for i, v := range result.Users {
 		if strings.Compare(v.Email, term) == 0 {
 			return &result.Users[i], nil
-
 		}
 	}
 
@@ -135,33 +138,38 @@ type Users struct {
 
 //User ...
 type User struct {
-	Img32URL                string      `json:"img32_url,omitempty"`
-	OrgID                   string      `json:"org_id,omitempty"`
-	ID                      string      `json:"id,omitempty"`
-	Login                   string      `json:"login,omitempty"`
-	Firstname               string      `json:"firstname,omitempty"`
-	Lastname                string      `json:"lastname,omitempty"`
-	Phone                   string      `json:"phone,omitempty"`
-	UniqueID                string      `json:"unique_id,omitempty"`
-	Email                   string      `json:"email,omitempty"`
-	BadgeID                 string      `json:"badge_id,omitempty"`
-	Address                 string      `json:"address,omitempty"`
-	City                    string      `json:"city,omitempty"`
-	Zip                     string      `json:"zip,omitempty"`
-	Country                 string      `json:"country,omitempty"`
-	LanguageID              string      `json:"language_id,omitempty"`
-	ExtendedInfo            string      `json:"extended_info,omitempty"`
-	Settings                string      `json:"settings,omitempty"`
-	DelegatorUserID         string      `json:"delegator_user_id,omitempty"`
-	ContractsCount          int         `json:"contracts_count,omitempty"`
-	AccountEnabled          bool        `json:"account_enabled,omitempty"`
-	ImgDigest               interface{} `json:"img_digest,omitempty"`
-	SecondaryEmail          interface{} `json:"secondary_email,omitempty"`
-	IsAdmin                 bool        `json:"is_admin,omitempty"`
-	UpdatedAt               time.Time   `json:"updated_at,omitempty"`
-	URL                     interface{} `json:"url,omitempty"`
-	PasswordSignInEnabled   bool        `json:"password_sign_in_enabled,omitempty"`
-	Img256URL               interface{} `json:"img256_url,omitempty"`
-	InventoryPoolRolesCount int         `json:"inventory_pool_roles_count,omitempty"`
-	CreatedAt               time.Time   `json:"created_at,omitempty"`
+	SystemAdminProtected  bool      `json:"system_admin_protected,omitempty"`
+	Address               string    `json:"address,omitempty"`
+	Email                 string    `json:"email,omitempty"`
+	PoolProtected         bool      `json:"pool_protected,omitempty"`
+	LastSignInAt          string    `json:"last_sign_in_at,omitempty"`
+	Img32URL              string    `json:"img32_url,omitempty"`
+	AccountEnabled        bool      `json:"account_enabled,omitempty"`
+	Lastname              string    `json:"lastname,omitempty"`
+	Phone                 string    `json:"phone,omitempty"`
+	ImgDigest             string    `json:"img_digest,omitempty"`
+	OrgID                 string    `json:"org_id,omitempty"`
+	ExtendedInfo          string    `json:"extended_info,omitempty"`
+	SecondaryEmail        string    `json:"secondary_email,omitempty"`
+	City                  string    `json:"city,omitempty"`
+	Settings              string    `json:"settings,omitempty"`
+	IsAdmin               bool      `json:"is_admin,omitempty"`
+	Organization          string    `json:"organization,omitempty"`
+	Login                 string    `json:"login,omitempty"`
+	Searchable            string    `json:"searchable,omitempty"`
+	UpdatedAt             time.Time `json:"updated_at,omitempty"`
+	Firstname             string    `json:"firstname,omitempty"`
+	Zip                   string    `json:"zip,omitempty"`
+	ID                    string    `json:"id,omitempty"`
+	URL                   string    `json:"url,omitempty"`
+	PasswordSignInEnabled bool      `json:"password_sign_in_enabled,omitempty"`
+	AccountDisabledAt     string    `json:"account_disabled_at,omitempty"`
+	IsSystemAdmin         bool      `json:"is_system_admin,omitempty"`
+	BadgeID               string    `json:"badge_id,omitempty"`
+	LanguageLocale        string    `json:"language_locale,omitempty"`
+	Img256URL             string    `json:"img256_url,omitempty"`
+	Country               string    `json:"country,omitempty"`
+	DelegatorUserID       string    `json:"delegator_user_id,omitempty"`
+	CreatedAt             time.Time `json:"created_at,omitempty"`
+	AdminProtected        bool      `json:"admin_protected,omitempty"`
 }
